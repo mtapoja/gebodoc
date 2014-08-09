@@ -1,0 +1,52 @@
+#!/usr/bin/python2
+# -*- coding: utf-8 -*-
+
+#  gebodoc - information combinator and document generator.
+#  Copyright (c)  2014  Mika Tapojärvi <mika.tapojarvi@embelin.fi>.
+#
+#  Distributed under the MIT License, see file LICENSE.
+#  For full list of contributors, see file AUTHORS.
+#
+#  This file is part of gebodoc.
+
+
+from __future__ import print_function
+
+import os
+import sys
+import argparse
+#import ConfigParser
+#import xlrd
+#from Cheetah.Template import Template
+#import tempfile
+#import commands
+#import subprocess
+#import shutil
+#import re
+#from jira.client import JIRA
+
+
+def main():
+    """
+    Main function, call arguments parser and run stuff.
+    """
+    args = initialize_args().parse_args()
+
+
+def initialize_args():
+    """
+    Define all parameters.
+    """
+    shortdesc = 'Collect information from several sources and created documents out of them.'
+    exampledesc= 'example: '
+    parser = argparse.ArgumentParser(description=shortdesc, epilog=exampledesc, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument(
+        '-v', '--version', action='version', version='%(prog)s ' + VERSION,
+        help='Version of %(prog)s script')
+    return parser
+
+
+if __name__ == '__main__':
+    VERSION = '0.1-dev'
+    main()
+
