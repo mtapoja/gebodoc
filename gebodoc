@@ -30,19 +30,33 @@ def main():
     """
     Main function, call arguments parser and run stuff.
     """
+
     args = initialize_args().parse_args()
+
+    if len(sys.argv) == 1:
+        print('%s\nMore options with -h or --help parameters.' % shortdesc)
+
+    else:
+        if args.configfile:
+            print('configf: %s' % args.configfile)
+        else:
+            print('no configf')
 
 
 def initialize_args():
     """
     Define all parameters.
     """
-    shortdesc = 'Collect information from several sources and created documents out of them.'
+    global shortdesc
+    shortdesc = 'gebodoc - Collect information from several sources and create documents out of them.'
     exampledesc= 'example: '
     parser = argparse.ArgumentParser(description=shortdesc, epilog=exampledesc, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
         '-v', '--version', action='version', version='%(prog)s ' + VERSION,
         help='Version of %(prog)s script')
+    parser.add_argument(
+        '-c', '--configfile', action='append', dest='configfile',
+        help='Document configuration file, uses INI syntax.')
     return parser
 
 
