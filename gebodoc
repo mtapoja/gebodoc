@@ -1,5 +1,8 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
+"""
+gebodoc - information combinator and document generator.
+"""
 
 #  gebodoc - information combinator and document generator.
 #  Copyright (c)  2014  Mika Tapojärvi <mika.tapojarvi@embelin.fi>.
@@ -12,10 +15,11 @@
 
 from __future__ import print_function
 
-import os
+#import os
 import sys
 import argparse
-#import ConfigParser
+import logging
+import ConfigParser
 #import xlrd
 #from Cheetah.Template import Template
 #import tempfile
@@ -31,14 +35,15 @@ def main():
     Main function, call arguments parser and run stuff.
     """
 
+    logging.info('entering main()')
     args = initialize_args().parse_args()
 
     if len(sys.argv) == 1:
         print('%s\nMore options with -h or --help parameters.' % shortdesc)
 
     else:
-        if args.configfile:
-            print('configf: %s' % args.configfile)
+        if args.configfiles:
+            print('configf: %s' % args.configfiles)
         else:
             print('no configf')
 
@@ -48,19 +53,65 @@ def initialize_args():
     Define all parameters.
     """
     global shortdesc
-    shortdesc = 'gebodoc - Collect information from several sources and create documents out of them.'
-    exampledesc= 'example: '
-    parser = argparse.ArgumentParser(description=shortdesc, epilog=exampledesc, formatter_class=argparse.RawDescriptionHelpFormatter)
+
+
+    logging.info('entering initialize_args()')
+
+    shortdesc = ('gebodoc - Collect information from several sources and create'
+        ' documents out of them.')
+    exampledesc = 'example: '
+    parser = argparse.ArgumentParser(
+        description=shortdesc, epilog=exampledesc,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
         '-v', '--version', action='version', version='%(prog)s ' + VERSION,
         help='Version of %(prog)s script')
     parser.add_argument(
-        '-c', '--configfile', action='append', dest='configfile',
-        help='Document configuration file, uses INI syntax.')
+        '-c', '--configfiles', action='append', dest='configfiles',
+        help='Document configuration file that uses INI syntax. This parameter'
+        ' can be used more than once.')
     return parser
+
+
+class Documenter(object):
+    """
+    Documenter class contains all needed calls to information readers, contains
+    the collected information and then calls appropriate output document
+    builders or compilers.
+    """
+
+    def __init__(self, conf):
+        """
+        conf: configuration file name.
+        """
+        logging.info('Initializing Documenter class.')
+
+        self.configuration = conf
+
+
+    def parse_configuration(self):
+        """
+        Read and parse the configuration file.
+        """
+        logging.info('entering Doc:parse_configuration')
+        confparser = ConfigParser.RawConfigParser()
+        confparser.read(self.configuration)
+
+
+    def read_information(self):
+        """
+        Read information from all sources configuration file defines.
+        """
+        logging.info('entering Doc:read_information')
+        print('Reading information')
+
 
 
 if __name__ == '__main__':
     VERSION = '0.1-dev'
+
+    logging.basicConfig(filename='gebodoc.log', level=logging.DEBUG)
+    logging.info('Starting gebodoc ver. ' + VERSION)
+
     main()
 
