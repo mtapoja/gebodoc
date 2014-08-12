@@ -15,7 +15,7 @@ gebodoc - information combinator and document generator.
 
 from __future__ import print_function
 
-#import os
+import os
 import sys
 import argparse
 import logging
@@ -43,9 +43,10 @@ def main():
 
     else:
         if args.configfiles:
-            print('configf: %s' % args.configfiles)
+            doc = Documenter(args.configfiles)
+            doc.parse_configuration()
         else:
-            print('no configf')
+            logging.warning('no configfile')
 
 
 def initialize_args():
@@ -84,7 +85,7 @@ class Documenter(object):
         """
         conf: configuration file name.
         """
-        logging.info('Initializing Documenter class.')
+        logging.info('Initializing Documenter class, conffile: %s' % conf)
 
         self.configuration = conf
 
@@ -96,6 +97,48 @@ class Documenter(object):
         logging.info('entering Doc:parse_configuration')
         confparser = ConfigParser.RawConfigParser()
         confparser.read(self.configuration)
+
+        # Initialize variables
+        self.document_name = ''
+
+        for section in confparser.sections():
+
+            # Set basic document information to variables
+            if section == 'document':
+                logging.info('document info section:')
+
+                for an_item in confparser.items(section):
+                    if an_item[0] == 'docname':
+                        self.document_name = an_item[1]
+                        logging.info('  document name: %s' % self.document_name)
+
+                    if an_item[0] == 'doctemplatefile':
+                        self.document_template = an_item[1]
+                        if os.path.isfile(self.document_template):
+                            logging.info('  document template: %s, file found' % self.document_template)
+                        else:
+                            logging.error('  document template: %s, FILE NOT FOUND!' % self.document_template)
+
+                    if an_item[0] == 'outputformat':
+                        self.document_outputformat= an_item[1]
+                        logging.info('  document output format: %s' % self.document_outputformat)
+            else:
+                logging.debug('section: %s' % section)
+                for an_item in confparser.items(section):
+
+                    # Read and process data fields
+
+                    # If first character is |, an_item defines a list.
+                    if an_item[1][0] == '|':
+                        logging.debug('  key: %s, list format found!' % an_item[0])
+                        for list_item in an_item[1].split('|'):
+                            if list_item == '':
+                                logging.debug('    +------------+------------------------------+')
+                            else:
+                                logging.debug('    | {0:11s}| {1:29s}|'.format(list_item.split('?')[0], list_item.split('?')[1]))
+
+                    else:
+                        logging.debug('  item: %s = %s ' % (an_item[0], an_item[1]))
 
 
     def read_information(self):
@@ -110,7 +153,8 @@ class Documenter(object):
 if __name__ == '__main__':
     VERSION = '0.1-dev'
 
-    logging.basicConfig(filename='gebodoc.log', level=logging.DEBUG)
+    #logging.basicConfig(filename='gebodoc.log', level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG)
     logging.info('Starting gebodoc ver. ' + VERSION)
 
     main()

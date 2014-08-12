@@ -5,6 +5,7 @@ Curriculum Vitae
 Name:
 Address:
 Email:
+Telephone:
 
 
 Personal information
