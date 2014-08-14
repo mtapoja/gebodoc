@@ -133,9 +133,9 @@ class Documenter(object):
                         logging.debug('  key: %s, list format found!' % an_item[0])
                         for list_item in an_item[1].split('|'):
                             if list_item == '':
-                                logging.debug('    +------------+------------------------------+')
+                                logging.debug('    +-------------------+---------------------------------------+')
                             else:
-                                logging.debug('    | {0:11s}| {1:29s}|'.format(list_item.split('?')[0], list_item.split('?')[1]))
+                                logging.debug('    | {0:18s}| {1:38s}|'.format(list_item.split('?')[0].strip(), list_item.split('?')[1].strip()))
 
                     else:
                         logging.debug('  item: %s = %s ' % (an_item[0], an_item[1]))
