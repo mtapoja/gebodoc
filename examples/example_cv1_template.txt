@@ -2,14 +2,15 @@
 Curriculum Vitae
 =================================
 
-Name:
-Address:
-Email:
-Telephone:
+Name:       $docdata.person_name
+Address:    $docdata.person_address
+Email:      $docdata.person_email
+Telephone:  $docdata.person_phonenumber
 
 
 Personal information
 ---------------------------------
+$docdata.person_personalinfo
 
 
 Employment history
@@ -22,3 +23,4 @@ Education
 
 Hobbies
 ---------------------------------
+$docdata.person_hobbies

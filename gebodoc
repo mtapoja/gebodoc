@@ -20,8 +20,8 @@ import sys
 import argparse
 import logging
 import ConfigParser
+from Cheetah.Template import Template
 #import xlrd
-#from Cheetah.Template import Template
 #import tempfile
 #import commands
 #import subprocess
@@ -45,6 +45,7 @@ def main():
         if args.configfiles:
             doc = Documenter(args.configfiles)
             doc.parse_configuration()
+            doc.process_template()
         else:
             logging.warning('no configfile')
 
@@ -74,6 +75,13 @@ def initialize_args():
     return parser
 
 
+# from: http://stackoverflow.com/questions/35988/c-like-structures-in-python
+#class StructMap(dict):
+#    def __init__(self, **kwargs):
+#        super(StructMap, self).__init__(**kwargs)
+#        self.__dict__ = self
+
+
 class Documenter(object):
     """
     Documenter class contains all needed calls to information readers, contains
@@ -87,6 +95,16 @@ class Documenter(object):
         """
         logging.info('Initializing Documenter class, conffile: %s' % conf)
 
+        # Initialize variables
+        self.data = {}
+        # TODO take into use self.list1 = []
+        # TODO take into use self.list2 = []
+        self.document_name = ''
+        self.document_template = ''
+        self.document_template_found = False
+        self.document_outputformat = ''
+
+
         self.configuration = conf
 
 
@@ -97,9 +115,6 @@ class Documenter(object):
         logging.info('entering Doc:parse_configuration')
         confparser = ConfigParser.RawConfigParser()
         confparser.read(self.configuration)
-
-        # Initialize variables
-        self.document_name = ''
 
         for section in confparser.sections():
 
@@ -115,13 +130,21 @@ class Documenter(object):
                     if an_item[0] == 'doctemplatefile':
                         self.document_template = an_item[1]
                         if os.path.isfile(self.document_template):
-                            logging.info('  document template: %s, file found' % self.document_template)
+                            logging.info(
+                                '  document template: %s, file found' %
+                                self.document_template)
+                            self.document_template_found = True
                         else:
-                            logging.error('  document template: %s, FILE NOT FOUND!' % self.document_template)
+                            logging.error(
+                                '  document template: %s, FILE NOT FOUND!' %
+                                self.document_template)
+                            self.document_template_found = False
 
                     if an_item[0] == 'outputformat':
-                        self.document_outputformat= an_item[1]
-                        logging.info('  document output format: %s' % self.document_outputformat)
+                        self.document_outputformat = an_item[1]
+                        logging.info(
+                            '  document output format: %s' %
+                            self.document_outputformat)
             else:
                 logging.debug('section: %s' % section)
                 for an_item in confparser.items(section):
@@ -130,24 +153,49 @@ class Documenter(object):
 
                     # If first character is |, an_item defines a list.
                     if an_item[1][0] == '|':
-                        logging.debug('  key: %s, list format found!' % an_item[0])
+                        logging.debug(
+                            '  key: %s, list format found!' %
+                            an_item[0])
                         for list_item in an_item[1].split('|'):
                             if list_item == '':
-                                logging.debug('    +-------------------+---------------------------------------+')
+                                logging.debug(
+                                    '    +-------------------+-------'
+                                    '--------------------------------+')
                             else:
-                                logging.debug('    | {0:18s}| {1:38s}|'.format(list_item.split('?')[0].strip(), list_item.split('?')[1].strip()))
+                                logging.debug(
+                                    '    | {0:18s}| {1:38s}|'.format(
+                                    list_item.split('?')[0].strip(),
+                                    list_item.split('?')[1].strip()))
+                                # TODO fix this! self.data[(list_item.
+                                #split('?')[0].strip()] = list_item.
+                                #split('?')[1].strip()
 
                     else:
-                        logging.debug('  item: %s = %s ' % (an_item[0], an_item[1]))
+                        logging.debug(
+                            '  item: %s = %s ' %
+                            (an_item[0], an_item[1]))
+                        self.data[an_item[0]] = an_item[1]
 
 
     def read_information(self):
         """
-        Read information from all sources configuration file defines.
+        Read information from all sources the configuration file defines.
         """
         logging.info('entering Doc:read_information')
         print('Reading information')
 
+
+    def process_template(self):
+        """
+        Read and process the template file and print it to a temporary output file, if needed.
+        The temp file can be processed to another format such as PDF. Text outputformat does
+        not need temp file.
+        """
+        logging.info('entering Doc:process_template')
+
+        print(
+            Template(file = self.document_template,
+            searchList = [{'docdata' : self.data}]))
 
 
 if __name__ == '__main__':
