@@ -97,8 +97,7 @@ class Documenter(object):
 
         # Initialize variables
         self.data = {}
-        # TODO take into use self.list1 = []
-        # TODO take into use self.list2 = []
+        self.listdata = []
         self.document_name = ''
         self.document_template = ''
         self.document_template_found = False
@@ -156,6 +155,8 @@ class Documenter(object):
                         logging.debug(
                             '  key: %s, list format found!' %
                             an_item[0])
+
+                        temporarylist = []
                         for list_item in an_item[1].split('|'):
                             if list_item == '':
                                 logging.debug(
@@ -166,9 +167,12 @@ class Documenter(object):
                                     '    | {0:18s}| {1:38s}|'.format(
                                     list_item.split('?')[0].strip(),
                                     list_item.split('?')[1].strip()))
-                                # TODO fix this! self.data[(list_item.
-                                #split('?')[0].strip()] = list_item.
-                                #split('?')[1].strip()
+                                temporarylist.append((list_item.split('?')[0].strip(),
+                                    list_item.split('?')[1].strip()))
+
+                        if temporarylist:
+                            print(temporarylist)
+                            self.listdata.append((list(temporarylist), temporarylist[0]))
 
                     else:
                         logging.debug(
@@ -194,8 +198,9 @@ class Documenter(object):
         logging.info('entering Doc:process_template')
 
         print(
-            Template(file = self.document_template,
-            searchList = [{'docdata' : self.data}]))
+            Template(
+                file = self.document_template,
+                searchList = [{'docdata' : self.data, 'listdata' : self.listdata}]))
 
 
 if __name__ == '__main__':
