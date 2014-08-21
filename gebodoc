@@ -171,7 +171,6 @@ class Documenter(object):
                                     list_item.split('?')[1].strip()))
 
                         if temporarylist:
-                            print(temporarylist)
                             self.listdata.append((list(temporarylist), temporarylist[0]))
 
                     else:
