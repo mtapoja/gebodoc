@@ -7,6 +7,6 @@ Standards-Version: 3.9.2
 
 Package: gebodoc
 Architecture: all
-Depends: ${misc:Depends}, python2
+Depends: ${misc:Depends}, python2, python-cheetah
 Description: gebodoc information combinator and document generator
  Use gebodoc to collect information and create documents.
