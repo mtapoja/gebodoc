@@ -15,14 +15,14 @@ $docdata.person_personalinfo
 
 Employment history
 ---------------------------------
-#for $listitem in $listdata[0][0]
+#for $listitem in $listdata[0]
   * $listitem[0] :  $listitem[1]
 #end for
 
 
 Education
 ---------------------------------
-#for $listitem in $listdata[1][0]
+#for $listitem in $listdata[1]
   * $listitem[0] :  $listitem[1]
 #end for
 

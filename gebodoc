@@ -157,21 +157,33 @@ class Documenter(object):
                             an_item[0])
 
                         temporarylist = []
-                        for list_item in an_item[1].split('|'):
-                            if list_item == '':
-                                logging.debug(
-                                    '    +-------------------+-------'
-                                    '--------------------------------+')
+                        columns = 0
+
+                        # | character is also a list row separator, break
+                        # a configuration item to list_row.
+                        for list_row in an_item[1].split('|'):
+                            varlist = []
+                            if list_row == '':
+                                pass
                             else:
-                                logging.debug(
-                                    '    | {0:18s}| {1:38s}|'.format(
-                                    list_item.split('?')[0].strip(),
-                                    list_item.split('?')[1].strip()))
-                                temporarylist.append((list_item.split('?')[0].strip(),
-                                    list_item.split('?')[1].strip()))
+                                if not columns:
+                                    columns = len(list_row.split('?'))
+
+                                debugstr = '    | '
+
+                                # One list_row has columns separated by ?
+                                # character, split columns to list_column.
+                                for list_column in list_row.split('?'):
+                                    list_column = list_column.replace('\n', '')
+                                    varlist.append(list_column)
+                                    debugstr += list_column + ' | '
+                                logging.debug(debugstr)
+
+                            if varlist:
+                                temporarylist.append(tuple(varlist))
 
                         if temporarylist:
-                            self.listdata.append((list(temporarylist), temporarylist[0]))
+                            self.listdata.append(temporarylist)
 
                     else:
                         logging.debug(
@@ -199,7 +211,8 @@ class Documenter(object):
         print(
             Template(
                 file = self.document_template,
-                searchList = [{'docdata' : self.data, 'listdata' : self.listdata}]))
+                searchList = [{'docdata' : self.data,
+                    'listdata' : self.listdata}]))
 
 
 if __name__ == '__main__':

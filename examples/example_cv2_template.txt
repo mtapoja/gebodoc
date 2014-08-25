@@ -17,8 +17,8 @@ $docdata.person_phonenumber
 PREVIOUS EMPLOYERS AND JOB DESCRIPTION
 
 +----------------------------------------------
-#for $listitem in $listdata[0][0]
-| $listitem[0] -  $listitem[1]
+#for $listitem in $listdata[0]
+| $listitem[0] -  $listitem[1] -  $listitem[2]
 +----------------------------------------------
 #end for
 
@@ -26,7 +26,7 @@ PREVIOUS EMPLOYERS AND JOB DESCRIPTION
 EDUCATION
 
 +----------------------------------------------
-#for $listitem in $listdata[1][0]
+#for $listitem in $listdata[1]
 | $listitem[0] :  $listitem[1]
 +----------------------------------------------
 #end for
