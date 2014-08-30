@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# Initialize variables
+ALLFILESBEFORE=`mktemp /tmp/geboallf_before.XXXX`
+ALLFILESAFTER=`mktemp /tmp/geboallf_after.XXXX`
+GEBOSOURCESBEFORE=`mktemp /tmp/gebos_before.XXXX`
+GEBOSOURCESAFTER=`mktemp /tmp/gebos_after.XXXX`
+
+if [ -z "$1" ];
+then
+    # Short help when there's no parameters.
+    echo -e "Build gebodoc into .deb.\n"
+    echo "'`basename $0` dev'    Create development build, don't upload."
+    echo "'`basename $0` rel'    Create release build and upload to PPA."
+elif [ "$1" == "dev" ];
+then
+    # Plain binary build for development purposes.
+    debuild -us -uc -b
+elif [ "$1" == "rel" ];
+then
+    # List supported distros and build appropriate packages. Finetune
+    # debian/changelog on the fly.
+    DISTROS="precise trusty"
+
+    for DISTRO in $DISTROS;
+    do
+        pushd ..
+        ls -1 *_source.changes | sort > $GEBOSOURCESBEFORE
+        ls -1 *.* | sort > $ALLFILESBEFORE
+        popd
+
+        echo "----------------------------------"
+        echo "building for $DISTRO"
+        echo "----------------------------------"
+
+        VER="`head -n 1 debian/changelog | sed 's/^.*(//; s/).*//'`${DISTRO}1"
+        dch  -v $VER -D $DISTRO --force-distribution "$DISTRO build"
+        debuild -S -sa -k$GPGKEY
+        git checkout debian/changelog
+
+        pushd ..
+        ls -1 *_source.changes | sort > $GEBOSOURCESAFTER
+        FILETODPUT=`diff $GEBOSOURCESBEFORE $GEBOSOURCESAFTER | tail -n 1 | sed 's/> //'`
+        dput ppa:mtapoja/tools $FILETODPUT
+
+        ls -1 *.* | sort > $ALLFILESAFTER
+        diff $ALLFILESBEFORE $ALLFILESAFTER | sed 's/> //' | grep -v "," | xargs rm -f
+        popd
+    done
+fi
+
+rm -rf $GEBOSOURCESBEFORE $GEBOSOURCESAFTER $ALLFILESBEFORE $ALLFILESAFTER

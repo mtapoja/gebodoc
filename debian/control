@@ -3,10 +3,11 @@ Section: utils
 Priority: extra
 Maintainer: Mika Tapojärvi <mika.tapojarvi@embelin.fi>
 Build-Depends: debhelper (>= 7.0.50~)
-Standards-Version: 3.9.2
+Standards-Version: 3.9.3
 
 Package: gebodoc
 Architecture: all
 Depends: ${misc:Depends}, python2
-Description: gebodoc information combinator and document generator
- Use gebodoc to collect information and create documents.
+Description: Information combinator and document generator
+ Use gebodoc to collect information from various sources (such as data files,
+ Excel docs, database, Jira, Bugzilla etc.) and create documents out of it.
