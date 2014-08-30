@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 7.0.50~)
 Standards-Version: 3.9.3
 
 Package: gebodoc
-Architecture: all
+Architecture: any
 Depends: ${misc:Depends}, python2
 Description: Information combinator and document generator
  Use gebodoc to collect information from various sources (such as data files,

@@ -1,3 +1,9 @@
+gebodoc (0.0.1-2) UNRELEASED; urgency=low
+
+  * Package architecture changed from all to any.
+
+ -- Mika Tapojärvi <mika.tapojarvi@embelin.fi>  Sat, 30 Aug 2014 18:54:47 +0300
+
 gebodoc (0.0.1-1) UNRELEASED; urgency=low
 
   * Initial packaging.
