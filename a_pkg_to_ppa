@@ -6,6 +6,24 @@ ALLFILESAFTER=`mktemp /tmp/geboallf_after.XXXX`
 GEBOSOURCESBEFORE=`mktemp /tmp/gebos_before.XXXX`
 GEBOSOURCESAFTER=`mktemp /tmp/gebos_after.XXXX`
 
+# Basic sanity check: are Debian packaging tools installed?
+type debuild > /dev/null 2> /dev/null
+if [ $? -eq 1 ];
+then
+    echo "debuild tool not found, you should install 'devscripts' package."
+    echo "sudo apt-get install devscripts"
+    exit 1
+fi
+
+type dh_lintian > /dev/null 2> /dev/null
+if [ $? -eq 1 ];
+then
+    echo "dh_lintian tool not found, you should install 'debhelper' package."
+    echo "sudo apt-get install debhelper"
+    exit 1
+fi
+
+
 if [ -z "$1" ];
 then
     # Short help when there's no parameters.
