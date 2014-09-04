@@ -26,7 +26,7 @@ Implemented features:
 
 Planned features include (but probably are not limited to):
 - data sources:
-  * local textual data (e.g. csv or plain text)
+  * local textual data (e.g. csv or ~~plain text~~)
   * textual data from URL
   * bug/issue systems (Jira, Bugzilla)
   * version control (git), also repo manifest (XML format used by Googlen repo tool)
@@ -34,6 +34,13 @@ Planned features include (but probably are not limited to):
   * LibreOffice Calc file
   * several configuration and data formats (e.g. INI forma, probably YAML, JSON, XML)
   * SQLite database (maybe from actual database servers too)
+- template formats:
+  * text format (basically any text format, such as ~~text~~ and HTML)
+  * LaTeX
+- output formats:
+  * ~~text format~~ (basically the same than the textual template format - no conversion)
+  * PDF (e.g. LaTeX to PDF)
+  * HTML (e.g. LaTeX to HTML)
 
 Where's the name comes from?
 See: http://runesecrets.com/rune-meanings/gebo
