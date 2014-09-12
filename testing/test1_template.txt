@@ -1,0 +1,6 @@
+List of normal variables:
+$docdata.person_personalinfo
+$docdata.person_name
+$docdata.person_address
+$docdata.person_email
+$docdata.person_phonenumber
