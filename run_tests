@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# This script is part of gebodoc project.
+
+pushd testing
+nosetests -v test_gebodoc.py
+popd
