@@ -12,24 +12,41 @@ def read_verification_file(filename):
 #
 # Test cases.
 
-def test_test1_simple_string_variables():
-    test_config = './test1.cfg'
-    test_result = './test1_result.txt'
+def output_and_execution(tc, tr):
+    # This function might not be necessary once writing to a file works.
     saved_stdout = sys.stdout
     try:
         out = StringIO()
         sys.stdout = out
 
-        doc = gebodoc.Documenter(test_config)
+        doc = gebodoc.Documenter(tc)
         doc.parse_configuration()
         doc.process_template()
 
         output = out.getvalue()
 
-        verificationdata = read_verification_file(test_result)
+        verificationdata = read_verification_file(tr)
 
         # Compare.
         assert output == verificationdata
     finally:
         sys.stdout = saved_stdout
 
+
+
+def test_test1_simple_string():
+    test_config = './cases/test1.cfg'
+    test_result = './cases/test1_result.txt'
+    output_and_execution(test_config, test_result)
+
+
+def test_string_and_2_column_list():
+    test_config = './cases/string_and_2_column_list.cfg'
+    test_result = './cases/string_and_2_column_list_result.txt'
+    output_and_execution(test_config, test_result)
+
+
+def test_string_and_3_column_list():
+    test_config = './cases/string_and_3_column_list.cfg'
+    test_result = './cases/string_and_3_column_list_result.txt'
+    output_and_execution(test_config, test_result)

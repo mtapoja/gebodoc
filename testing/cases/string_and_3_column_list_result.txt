@@ -1,0 +1,11 @@
+
+List of normal variables:
+Lots of personal information here, also
+multiline string in config file.
+It just works!
+
+List of list variables:
+  * First line, first column :  First line, second column.  :  First line, third column.
+  * Second line, first column :  Second line, second column.  :  Second line, third column.
+  * Third line, first column :  Third line, section column.  :  Third line, third, column.
+

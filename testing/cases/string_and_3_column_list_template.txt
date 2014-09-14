@@ -1,0 +1,8 @@
+
+List of normal variables:
+$docdata.person_personalinfo
+
+List of list variables:
+#for $listitem in $listdata[0]
+  * $listitem[0] :  $listitem[1]  :  $listitem[2]
+#end for
