@@ -7,7 +7,9 @@ Standards-Version: 3.9.3
 
 Package: gebodoc
 Architecture: all
-Depends: ${misc:Depends}, python2
+Depends: ${misc:Depends}, python2, texlive-binaries, texlive-latex-base,
+ texlive-latex-recommended, rubber
+Suggests: texlive-latex-extra
 Description: Information combinator and document generator
  Use gebodoc to collect information from various sources (such as data files,
  Excel docs, database, Jira, Bugzilla etc.) and create documents out of it.
