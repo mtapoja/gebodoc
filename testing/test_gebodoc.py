@@ -1,10 +1,10 @@
 
+import os
 import sys
-from StringIO import StringIO
 import gebodoc
 
-# Read the correct verification file where the output is compared.
-def read_verification_file(filename):
+# Read the textual output or verification file.
+def read_a_file(filename):
     with open (filename, 'r') as resultfile:
         resultdata = resultfile.read()
     return resultdata
@@ -13,25 +13,24 @@ def read_verification_file(filename):
 # Test cases.
 
 def output_and_execution(tc, tr):
-    # This function might not be necessary once writing to a file works.
-    saved_stdout = sys.stdout
     try:
-        out = StringIO()
-        sys.stdout = out
-
         doc = gebodoc.Documenter(tc)
         doc.parse_configuration()
         doc.process_template()
 
-        output = out.getvalue()
+        # Assume that a test case that has a config file called 'conf_for_test.cfg'
+        # producess output file called 'conf_for_test'.
+        tcconfigpath, tcconfigfilename = os.path.split(tc)
+        outputfilename, fileextension = os.path.splitext(tcconfigfilename)
 
-        verificationdata = read_verification_file(tr)
+        output = read_a_file(outputfilename)
+        verificationdata = read_a_file(tr)
 
         # Compare.
         assert output == verificationdata
     finally:
-        sys.stdout = saved_stdout
-
+        # Clean up the temporary output files.
+        os.unlink(outputfilename)
 
 
 def test_test1_simple_string():
