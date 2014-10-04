@@ -14,18 +14,18 @@ gebodoc - information combinator and document generator.
 
 
 from __future__ import print_function
-
 import os
 import sys
 import argparse
 import logging
 import ConfigParser
 from Cheetah.Template import Template
+import tempfile
+import subprocess
+import shutil
 #import xlrd
-#import tempfile
 #import commands
 #import subprocess
-#import shutil
 #import re
 #from jira.client import JIRA
 
@@ -208,15 +208,50 @@ class Documenter(object):
         """
         logging.info('entering Doc:process_template')
 
-        print(
-            Template(
-                file = self.document_template,
-                searchList = [{'docdata' : self.data,
-                    'listdata' : self.listdata}]))
+        if self.document_outputformat == 'text':
+            document_out = open(self.document_name, 'w+')
+            print(
+                Template(
+                    file = self.document_template,
+                    searchList = [{'docdata' : self.data,
+                        'listdata' : self.listdata}]),
+                    file=document_out)
+        elif self.document_outputformat == 'pdf':
+            # A temporary output file for final LaTeX
+            tmplatexout = tempfile.NamedTemporaryFile(
+                mode='w+',
+                dir='/tmp/',
+                delete=False)
+            print(
+                Template(
+                    file = self.document_template,
+                    searchList = [{'docdata' : self.data,
+                        'listdata' : self.listdata}]),
+                    file=tmplatexout)
+            tmplatexout.seek(0)
+            tmplatexout.flush()
+
+            logging.debug('tmplatexout: %s to pdf' % tmplatexout.name)
+
+            try:
+                subprocess.call(['rubber', '-d', tmplatexout.name])
+                subprocess.call(['rubber', '--clean', tmplatexout.name])
+            except:
+                logging.debug('Something went wrong in rubber command')
+
+            if os.path.isfile(tmplatexout.name):
+                tmppdfpath, tmppdf = os.path.split(tmplatexout.name)
+                tmppdf = tmppdf + '.pdf'
+
+                if self.document_name.find('.pdf') == -1 and self.document_name.find('.PDF') == -1:
+                    self.document_name = self.document_name + '.pdf'
+                shutil.move(tmppdf, self.document_name)
+                logging.debug('You should now have %s' % self.document_name)
+                os.unlink(tmplatexout.name)
 
 
 if __name__ == '__main__':
-    VERSION = '0.1-dev'
+    VERSION = '0.2-dev'
 
     #logging.basicConfig(filename='gebodoc.log', level=logging.DEBUG)
     logging.basicConfig(level=logging.DEBUG)
