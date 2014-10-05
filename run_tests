@@ -2,6 +2,30 @@
 
 # This script is part of gebodoc project.
 
+# Do we have dependencies installed?
+#
+# This needs to be tested until we create a test packaging of some sort.
+# The test packaging should bring dependencies and create a working test
+# environment.
+
+depes="python-nose"
+missing_packages=""
+
+for adepe in $depes;
+do
+    dpkg -l $adepe > /dev/null 2> /dev/null
+    [ $? -eq 0 ] || missing_packages="$missing_packages $adepe"
+done
+
+if [ "$missing_packages" == "" ]
+then
+    echo "Everything ok to proceed"
+else
+    echo "Dependencies missing, install: $missing_packages"
+    exit $everything_ok
+fi
+
+# Everything is ok, run the tests
 pushd testing
 nosetests -v test_gebodoc.py
 popd
