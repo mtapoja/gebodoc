@@ -1,0 +1,44 @@
+%%
+%% This file is part of gebodoc project.
+%% ================================================================================
+
+\documentclass[a4paper,portrait,12pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{calc}
+\usepackage{setspace}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage[normalem]{ulem}
+\usepackage{color}
+\usepackage{hyperref}
+
+\begin{document}
+
+\setlength{\oddsidemargin}{1.0000in-1in}
+\setlength{\textwidth}{\paperwidth - 1.0000in-1.0000in}
+
+
+Curriculum Vitae
+
+Name:       $docdata.person_name
+Address:    $docdata.person_address
+Email:      $docdata.person_email
+Telephone:  $docdata.person_phonenumber
+
+Personal information:
+$docdata.person_personalinfo
+
+
+Employment history:
+#for $listitem in $listdata[0]
+  * $listitem[0] :  $listitem[1]
+#end for
+
+
+Education
+#for $listitem in $listdata[1]
+  * $listitem[0] :  $listitem[1]
+#end for
+
+\end{document}

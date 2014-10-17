@@ -8,7 +8,7 @@
 # The test packaging should bring dependencies and create a working test
 # environment.
 
-depes="python-nose"
+depes="python-nose texlive-binaries texlive-latex-base texlive-latex-recommended rubber python-cheetah"
 missing_packages=""
 
 for adepe in $depes;
