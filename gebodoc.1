@@ -19,11 +19,17 @@
 \fBgebodooc\fP \- Information collector and document creator
 .SH SYNOPSIS
 .B gebodoc
-[ <no parameters> | \fB\-v\fR ]
+[ <no parameters> | \fB\-c\fR <configfiles> | \fB\-h\fR | \fB\-v\fR ]
 .br
 .br
 .B gebodoc
+[ \fB\-\-configfiles\fR ] <configfiles>
+.br
+.B gebodoc
 [ \fB\-\-help\fR ]
+.br
+.B gebodoc
+[ \fB\-\-version\fR ]
 .SH DESCRIPTION
 This manual page briefly documents the
 .B gebodoc
@@ -32,7 +38,13 @@ utility.
 .\" TeX users may be more comfortable with the \fB<whatever>\fP and
 .\" \fI<whatever>\fP escape sequences to invode bold face and italics,
 .\" respectively.
-\fBgebodooc\fP can be used for... 
+\fBgebodooc\fP can be used for collecting information from various sources and creating documents out of it.
+Sources of information can be static files in local file system or over the internet and in several different
+formats. Information can also reside in some kind of data storage such as database, version control or bug/issue
+systems such as Jira and Bugzilla.
+.PP
+Resulting document format can be one of several textual formats: text, HTML, XML etc, and also PDF. Basically
+output format depends only about used template and used document build command.
 .SH OPTIONS
 \fBgebodooc\fP follows the usual GNU command line syntax, with long options starting with two dashes ('-').
 A summary of options is included below.
@@ -40,11 +52,34 @@ A summary of options is included below.
 <no parameters>
 Display short usage and version.
 .TP
+\fB\-c\fR <configfiles>
+Document configuration file that uses INI syntax.
+The mandatory configuring items in [document] section contain the name of the result document, the template and output format.
+Optional items in [data] section can contain variable names and values, and multicolumn and multirow list data.
+.TP
+.B \-h, \-\-help
+Basic help and summary of options.
+.TP
+.B \-v, \-\-version
+Show version of the script.
+
 .SH EXAMPLES
-.TP 
+.TP
+To create an example CV document in text format with basic personal information of Donald Duck:
+gebodoc -c examples/example_cv1.cfg
+.PP
+See file CV_Donald_Duck for the result.
+
+.TP
+To create a CV in PDF format for Donald Duck:
+gebodoc -c examples/example_cv_latex_to_pdf.cfg
+.PP
+See file CV_Donald_Duck.pdf for the result.
+
 .SH COPYRIGHT
 .PP
 Copyright \(co 2014 Mika Tapojärvi <mika.tapojarvi@embelin.fi>
+.PP
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
 "Software"), to deal in the Software without restriction, including
