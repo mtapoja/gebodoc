@@ -89,7 +89,7 @@ class Documenter(object):
     builders or compilers.
     """
 
-    def __init__(self, conf):
+    def __init__(self, conf, testing_active=False):
         """
         conf: configuration file name.
         """
@@ -102,6 +102,9 @@ class Documenter(object):
         self.document_template = ''
         self.document_template_found = False
         self.document_outputformat = ''
+        self.testing_active = testing_active
+        if self.testing_active:
+            logging.info('Testing is active')
 
 
         self.configuration = conf
@@ -245,13 +248,19 @@ class Documenter(object):
 
                 if self.document_name.find('.pdf') == -1 and self.document_name.find('.PDF') == -1:
                     self.document_name = self.document_name + '.pdf'
+
                 shutil.move(tmppdf, self.document_name)
+
+                if self.testing_active:
+                    result_latex_file = self.document_name.replace('.pdf', '.tex')
+                    shutil.copyfile(tmplatexout.name, result_latex_file)
+
                 logging.debug('You should now have %s' % self.document_name)
                 os.unlink(tmplatexout.name)
 
 
 if __name__ == '__main__':
-    VERSION = '0.2-dev'
+    VERSION = '0.3-dev'
 
     #logging.basicConfig(filename='gebodoc.log', level=logging.DEBUG)
     logging.basicConfig(level=logging.DEBUG)

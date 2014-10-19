@@ -12,25 +12,32 @@ def read_a_file(filename):
 #
 # Test cases.
 
-def output_and_execution(tc, tr):
+def output_and_execution(tc, tr, to=''):
+    outputfilename = ''
     try:
-        doc = gebodoc.Documenter(tc)
+        doc = gebodoc.Documenter(tc, testing_active=True)
         doc.parse_configuration()
         doc.process_template()
 
-        # Assume that a test case that has a config file called 'conf_for_test.cfg'
-        # producess output file called 'conf_for_test'.
-        tcconfigpath, tcconfigfilename = os.path.split(tc)
-        outputfilename, fileextension = os.path.splitext(tcconfigfilename)
+        # If no test output file name (to) is given, assume that a test case
+        # with a config file called 'conf_for_test.cfg' produces an output
+        # file called 'conf_for_test'.
+        if to == '':
+            tcconfigpath, tcconfigfilename = os.path.split(tc)
+            outputfilename, fileextension = os.path.splitext(tcconfigfilename)
+            output = read_a_file(outputfilename)
+        else:
+            print('test output file: %s' % to)
+            output = read_a_file(to)
 
-        output = read_a_file(outputfilename)
         verificationdata = read_a_file(tr)
 
         # Compare.
         assert output == verificationdata
     finally:
         # Clean up the temporary output files.
-        os.unlink(outputfilename)
+        if outputfilename != '':
+            os.unlink(outputfilename)
 
 
 def test_test1_simple_string():
@@ -49,3 +56,17 @@ def test_string_and_3_column_list():
     test_config = './cases/string_and_3_column_list.cfg'
     test_result = './cases/string_and_3_column_list_result.txt'
     output_and_execution(test_config, test_result)
+
+def test_latex_to_pdf():
+    test_config = './cases/latex_to_pdf.cfg'
+    test_intermediate_result = './cases/latex_to_pdf_result.tex'
+    test_output = './latex_to_pdf.tex'
+    test_result = './latex_to_pdf.pdf'
+    output_and_execution(test_config, test_intermediate_result, test_output)
+
+    assert os.path.exists(test_result)
+
+    # Add teardown function, if similar cases appear later.
+    os.unlink(test_output)
+    os.unlink(test_result)
+
