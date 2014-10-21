@@ -260,7 +260,7 @@ class Documenter(object):
 
 
 if __name__ == '__main__':
-    VERSION = '0.3-dev'
+    VERSION = '0.0.2'
 
     #logging.basicConfig(filename='gebodoc.log', level=logging.DEBUG)
     logging.basicConfig(level=logging.DEBUG)

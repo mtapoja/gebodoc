@@ -1,3 +1,15 @@
+gebodoc (0.0.2-1) UNRELEASED; urgency=low
+
+  * Milestone 'PDF output format' implemented:
+    + Create a LaTeX template, issue #2.
+    + Create a test configuration file for LaTeX processing, issue #3.
+    + Temporary LaTeX file creation, issue #4.
+    + PDF creation, issue #5.
+    + Test task for PDF creation, issue #6.
+    + man page update for LaTex to PDF information, issue #7.
+
+ -- Mika Tapojärvi <mika.tapojarvi@embelin.fi>  Tue, 21 Oct 2014 23:02:11 +0300
+
 gebodoc (0.0.1-2) UNRELEASED; urgency=low
 
   * Package architecture changed from all to any.
