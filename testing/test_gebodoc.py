@@ -70,3 +70,8 @@ def test_latex_to_pdf():
     os.unlink(test_output)
     os.unlink(test_result)
 
+def test_file_uri_scheme():
+    test_config = './cases/file_uri_scheme.cfg'
+    test_result = './cases/test1_result.txt'
+    output_and_execution(test_config, test_result)
+
